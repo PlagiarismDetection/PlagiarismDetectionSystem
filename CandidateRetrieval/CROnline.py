@@ -28,7 +28,7 @@ class CROnline():
         return para_list
 
     @classmethod
-    def chunking(cls, data):
+    def chunking(cls, data, language='en'):
         # Split data text to get important paragraph
         para_list = cls.split_to_paras(data)
 
@@ -40,7 +40,11 @@ class CROnline():
 
         for par in para_list:
             # Use Preprocessing to sent to split each paragraph to list of sent.
-            sent_list = EngPreprocessing.preprocess2sent(par)
+            sent_list=''
+            if language=='en':
+                sent_list = EngPreprocessing.preprocess2sent(par)
+            else:
+                sent_list = VnmPreprocessing.preprocess2sent(par)
 
             # Chunking each paragraph to many chunks of 2 - 4 sentences.
             chunks = [sent_list[i: i + 3] for i in range(0, len(sent_list), 3)]
@@ -63,19 +67,26 @@ class CROnline():
         return chunk_list
 
     @staticmethod
-    def preprocess_chunk_list(chunk_list):
+    def preprocess_chunk_list(chunk_list, language='en'):
         # Preprocessing a chunk to remove stopword and punctuation.
         # Filtering chunk >= 10 word, word >= 4 and not contain special words.
-        pp_chunk_list = [EngPreprocessing.preprocess2word(chunk) for chunk in chunk_list]
+        pp_chunk_list=''
+        if language=='en':
+            pp_chunk_list = [EngPreprocessing.preprocess2word(chunk) for chunk in chunk_list]
+        else:
+            pp_chunk_list = [VnmPreprocessing.preprocess2word(chunk) for chunk in chunk_list]
         pp_chunk_list = [list(filter(lambda w: (len(w) >= 4) & (w not in ['date', 'time', 'http', 'https']) & (
             not w.startswith(r"//")), chunk)) for chunk in pp_chunk_list]
         pp_chunk_list = list(filter(lambda c: (len(c) >= 10), pp_chunk_list))
         return pp_chunk_list
 
     @staticmethod
-    def get_top_tf_idf_words(pp_chunk_list, top_k=20):
+    def get_top_tf_idf_words(pp_chunk_list, top_k=20, language='en'):
         # instantiate the vectorizer object
-        tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+        if language=='en':
+            tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+        else:
+            tfidf_vectorizer = TfidfVectorizer()
 
         # convert documents into a matrix
         chunk_list = [' '.join(c) for c in pp_chunk_list]
@@ -94,11 +105,11 @@ class CROnline():
         return top_list
 
     @classmethod
-    def query_formulate(cls, chunk_list, top_k=20):
-        pp_chunk_list = cls.preprocess_chunk_list(chunk_list)
+    def query_formulate(cls, chunk_list, top_k=20, language='en'):
+        pp_chunk_list = cls.preprocess_chunk_list(chunk_list, language)
         query1_list = ["+".join(w[:20]) for w in pp_chunk_list]
 
-        top_list = cls.get_top_tf_idf_words(pp_chunk_list, top_k)
+        top_list = cls.get_top_tf_idf_words(pp_chunk_list, top_k, language)
         query2_list = ["+".join(top) for top in top_list]
 
         return query1_list + query2_list
@@ -170,9 +181,10 @@ class CROnline():
     @staticmethod
     def snippet_based_checking_en(search_results, suspicious_doc_string, threshold=1):
         # Check overlap on 5-grams on suspicious document and candidate document
+        n=5
         sus_preprocessed = EngPreprocessing.preprocess2word(
             suspicious_doc_string)
-        sus_grams = ngrams(sus_preprocessed, 5)
+        sus_grams = ngrams(sus_preprocessed, n)
         sus_grams = [' '.join(grams) for grams in sus_grams]
         # print(sus_grams)
         # Define threshold overlap
@@ -180,11 +192,11 @@ class CROnline():
         check_snippet_based = []
 
         for candidate in search_results:
-            if candidate['snippet'] == '':
-                continue
             can_preprocessed = EngPreprocessing.preprocess2word(
                 candidate['snippet'])
-            can_grams = ngrams(can_preprocessed, 5)
+            if len(can_preprocessed)<n:
+                continue
+            can_grams = ngrams(can_preprocessed, n)
             can_grams = [' '.join(grams) for grams in can_grams]
             overlap = [value for value in sus_grams if value in can_grams]
 
@@ -197,9 +209,10 @@ class CROnline():
     @staticmethod
     def snippet_based_checking_vi(search_results, suspicious_doc_string, threshold=1):
         # Check overlap on 5-grams on suspicious document and candidate document
+        n = 3
         sus_preprocessed = VnmPreprocessing.preprocess2word(
             suspicious_doc_string)
-        sus_grams = ngrams(sus_preprocessed, 5)
+        sus_grams = ngrams(sus_preprocessed, n)
         sus_grams = [' '.join(grams) for grams in sus_grams]
         # print(sus_grams)
         # Define threshold overlap
@@ -207,11 +220,11 @@ class CROnline():
         check_snippet_based = []
 
         for candidate in search_results:
-            if candidate['snippet'] == '':
-                continue
             can_preprocessed = VnmPreprocessing.preprocess2word(
                 candidate['snippet'])
-            can_grams = ngrams(can_preprocessed, 5)
+            if len(can_preprocessed)<n:
+                continue
+            can_grams = ngrams(can_preprocessed, n)
             can_grams = [' '.join(grams) for grams in can_grams]
             overlap = [value for value in sus_grams if value in can_grams]
 
