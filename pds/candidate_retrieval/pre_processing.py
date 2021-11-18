@@ -1,5 +1,5 @@
-from pds.pre_processing import VnmPreprocessing
-from pds.pre_processing import EngPreprocessing
+from pds.pre_processing.vnm_preprocessing import VnmPreprocessing
+from pds.pre_processing.eng_preprocessing import EngPreprocessing
 from abc import ABC
 
 
