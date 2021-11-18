@@ -7,7 +7,8 @@ class PDF(FileObj):
     def __init__(self, metadata, content):
         super().__init__()
         self.content_type = metadata['Content-Type'] if 'Content-Type' in metadata.keys() else ''
-        self.title = metadata['resourceName'] if 'resourceName' in metadata.keys(
+        self.title = metadata['resourceName'].encode('latin1').decode(
+            'unicode_escape').encode('latin1').decode('utf8')[2:-1] if 'resourceName' in metadata.keys(
         ) else ''
         self.author = metadata['Author'] if 'Author' in metadata.keys() else ''
         self.creation_date = metadata['Creation-Date'] if 'Creation-Date' in metadata.keys() else ''
