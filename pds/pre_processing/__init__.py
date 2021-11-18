@@ -1,6 +1,3 @@
-from .EngPreprocessing import *
-from .VnmPreprocessing import *
-
 from nltk import download
 
 # download the English stopwords from NLTK

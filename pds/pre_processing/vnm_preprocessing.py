@@ -1,12 +1,12 @@
 # library for regular expression operations
 import re
 # library for standardlize VNM, download from https://gist.github.com/nguyenvanhieuvn/72ccf3ddf7d179b281fdae6c0b84942b
-from PreProcessing.nlp_utils import *
+from pds.pre_processing.nlp_utils import *
 # library for VNM word tokenization
 from underthesea import word_tokenize, sent_tokenize
 
 # Import the Vietnamese stopwords file, download from: https://github.com/stopwords/vietnamese-stopwords
-f = open('PreProcessing/vietnamese-stopwords.txt', 'r')
+f = open('pds/pre_processing/vietnamese-stopwords.txt', 'r')
 vnm_stopwords = f.read().splitlines()
 f.close()
 
