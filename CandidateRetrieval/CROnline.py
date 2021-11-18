@@ -55,7 +55,7 @@ class CROnline():
 
             # Combine all sentences of a chunk to 1 string
             chunks = [' '.join(c) for c in chunks]
-            print(chunks)
+          
 
             # Filter for chunk > 100 char, and add to chunklist.
             # filter(lambda c: len(c) > 100, chunks)
