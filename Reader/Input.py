@@ -1,5 +1,5 @@
-from Reader.DOCXReader import DOCXReader
-from Reader.PDFReader import PDFReader
+from reader.DOCXReader import DOCXReader
+from reader.PDFReader import PDFReader
 
 
 def readInputs(folder):

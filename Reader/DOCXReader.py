@@ -1,9 +1,9 @@
 import docx
 import glob
-from Reader.Reader import FileObj, Reader
+from abc import ABC
 
 
-class DOCX(FileObj):
+class DOCX(ABC):
     def __init__(self, metadata, content):
         super().__init__()
         self.content_type = 'docx'
@@ -28,7 +28,7 @@ class DOCX(FileObj):
         return self.content
 
 
-class DOCXReader(Reader):
+class DOCXReader(ABC):
     @staticmethod
     def __getDocxText(obj):
         docx_paras = obj.paragraphs
