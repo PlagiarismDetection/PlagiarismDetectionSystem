@@ -1,6 +1,6 @@
 import docx
 import glob
-from Reader.Reader import FileObj, Reader
+from pds.reader.reader import FileObj, Reader
 
 
 class DOCX(FileObj):

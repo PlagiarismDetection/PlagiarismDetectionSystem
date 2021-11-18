@@ -1,5 +1,5 @@
-from PreProcessing.VnmPreprocessing import VnmPreprocessing
-from PreProcessing.EngPreprocessing import EngPreprocessing
+from pds.pre_processing import VnmPreprocessing
+from pds.pre_processing import EngPreprocessing
 from abc import ABC
 
 

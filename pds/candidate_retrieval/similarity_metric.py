@@ -1,6 +1,6 @@
 from collections import defaultdict
 from abc import ABC
-from CandidateRetrieval.Ngrams import NGrams
+from pds.candidate_retrieval.n_grams import NGrams
 from nltk.corpus import wordnet as wn
 import math
 

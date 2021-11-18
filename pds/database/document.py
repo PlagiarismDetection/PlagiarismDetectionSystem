@@ -1,6 +1,6 @@
 from abc import ABC
-from Reader.DOCXReader import DOCXReader
-from Reader.PDFReader import PDFReader
+from pds.reader.docx import DOCXReader
+from pds.reader.pdf import PDFReader
 
 
 class Document(ABC):

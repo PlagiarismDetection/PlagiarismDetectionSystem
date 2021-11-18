@@ -1,6 +1,6 @@
 from tika import parser
 import glob
-from Reader.Reader import FileObj, Reader
+from pds.reader.reader import FileObj, Reader
 
 
 class PDF(FileObj):

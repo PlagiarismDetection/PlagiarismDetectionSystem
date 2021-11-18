@@ -3,9 +3,10 @@ import pandas as pd
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-from PreProcessing import VnmPreprocessing, EngPreprocessing
+from pds.pre_processing import VnmPreprocessing, EngPreprocessing
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from nltk import ngrams
+
 
 class CROnline():
     def __init__(self):
@@ -40,8 +41,8 @@ class CROnline():
 
         for par in para_list:
             # Use Preprocessing to sent to split each paragraph to list of sent.
-            sent_list=''
-            if language=='en':
+            sent_list = ''
+            if language == 'en':
                 sent_list = EngPreprocessing.preprocess2sent(par)
             else:
                 sent_list = VnmPreprocessing.preprocess2sent(par)
@@ -55,7 +56,6 @@ class CROnline():
 
             # Combine all sentences of a chunk to 1 string
             chunks = [' '.join(c) for c in chunks]
-          
 
             # Filter for chunk > 100 char, and add to chunklist.
             # filter(lambda c: len(c) > 100, chunks)
@@ -70,11 +70,13 @@ class CROnline():
     def preprocess_chunk_list(chunk_list, language='en'):
         # Preprocessing a chunk to remove stopword and punctuation.
         # Filtering chunk >= 10 word, word >= 4 and not contain special words.
-        pp_chunk_list=''
-        if language=='en':
-            pp_chunk_list = [EngPreprocessing.preprocess2word(chunk) for chunk in chunk_list]
+        pp_chunk_list = ''
+        if language == 'en':
+            pp_chunk_list = [EngPreprocessing.preprocess2word(
+                chunk) for chunk in chunk_list]
         else:
-            pp_chunk_list = [VnmPreprocessing.preprocess2word(chunk) for chunk in chunk_list]
+            pp_chunk_list = [VnmPreprocessing.preprocess2word(
+                chunk) for chunk in chunk_list]
         pp_chunk_list = [list(filter(lambda w: (len(w) >= 4) & (w not in ['date', 'time', 'http', 'https']) & (
             not w.startswith(r"//")), chunk)) for chunk in pp_chunk_list]
         pp_chunk_list = list(filter(lambda c: (len(c) >= 10), pp_chunk_list))
@@ -83,7 +85,7 @@ class CROnline():
     @staticmethod
     def get_top_tf_idf_words(pp_chunk_list, top_k=20, language='en'):
         # instantiate the vectorizer object
-        if language=='en':
+        if language == 'en':
             tfidf_vectorizer = TfidfVectorizer(stop_words='english')
         else:
             tfidf_vectorizer = TfidfVectorizer()
@@ -181,7 +183,7 @@ class CROnline():
     @staticmethod
     def snippet_based_checking_en(search_results, suspicious_doc_string, threshold=1):
         # Check overlap on 5-grams on suspicious document and candidate document
-        n=5
+        n = 5
         sus_preprocessed = EngPreprocessing.preprocess2word(
             suspicious_doc_string)
         sus_grams = ngrams(sus_preprocessed, n)
@@ -194,7 +196,7 @@ class CROnline():
         for candidate in search_results:
             can_preprocessed = EngPreprocessing.preprocess2word(
                 candidate['snippet'])
-            if len(can_preprocessed)<n:
+            if len(can_preprocessed) < n:
                 continue
             can_grams = ngrams(can_preprocessed, n)
             can_grams = [' '.join(grams) for grams in can_grams]
@@ -222,7 +224,7 @@ class CROnline():
         for candidate in search_results:
             can_preprocessed = VnmPreprocessing.preprocess2word(
                 candidate['snippet'])
-            if len(can_preprocessed)<n:
+            if len(can_preprocessed) < n:
                 continue
             can_grams = ngrams(can_preprocessed, n)
             can_grams = [' '.join(grams) for grams in can_grams]
