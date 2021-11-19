@@ -1,5 +1,4 @@
 from pds.database.document import Document
-from pds.database.connection import Connection
 from pds.candidate_retrieval.pre_processing import WordPreprocessing
 from pds.exhaustive.result import SimilarPair
 from pds.pre_processing.vnm_preprocessing import VnmPreprocessing
@@ -11,7 +10,7 @@ from pds.exhaustive.string_based import StringBasedTechnique
 from pds.exhaustive.result import Evidence, Result
 
 
-def vie_cr_offline_string_based_with_rabinkarp(database, collection, input_path, candidate_num, metric, ngrams_num, hash_prime):
+def vie_offline_string_based_with_rabinkarp(database, collection, input_path, candidate_num, metric, ngrams_num, hash_prime):
     input_vie = readInput(input_path)
 
     if len(input_vie) == 0:
@@ -52,10 +51,3 @@ def vie_cr_offline_string_based_with_rabinkarp(database, collection, input_path,
         result.addEvidence(evidence)
 
     result.print()
-
-
-database = Connection(
-    'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000', 'Documents').getDatabase()
-
-vie_cr_offline_string_based_with_rabinkarp(
-    database, 'vie', 'Inputs', 3, SimilarityMetric.Jaccard_1(), 5, 101)
