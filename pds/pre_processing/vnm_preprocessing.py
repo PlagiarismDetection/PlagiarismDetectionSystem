@@ -40,6 +40,13 @@ class VnmPreprocessing():
 
         return tokens_clean
 
+    @classmethod
+    def sentence_split(cls, text):
+        text = cls.standardize_unicode(text)
+        text = cls.standardize_marks(text)
+        text = cls.lowercasing(text)
+        return sent_tokenize(text)
+
     @staticmethod
     def tokenization(text):
         return word_tokenize(text)

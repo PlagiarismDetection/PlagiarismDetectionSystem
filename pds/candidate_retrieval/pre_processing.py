@@ -23,12 +23,12 @@ class WordPreprocessing(Preprocessing):
         return list(map(lambda item: EngPreprocessing.preprocess2word(item['Content']), collection))
 
     @staticmethod
-    def VieFilesProcessing(files):
-        return list(map(lambda item: VnmPreprocessing.preprocess2word(item.getContent()), files))
+    def VieFilesProcessing(file):
+        return VnmPreprocessing.preprocess2word(file.getContent())
 
     @staticmethod
-    def EngFilesProcessing(files):
-        return list(map(lambda item: EngPreprocessing.preprocess2word(item.getContent()), files))
+    def EngFilesProcessing(file):
+        return EngPreprocessing.preprocess2word(file.getContent())
 
 
 class NonPreProcessing(Preprocessing):

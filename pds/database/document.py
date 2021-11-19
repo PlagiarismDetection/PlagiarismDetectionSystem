@@ -51,3 +51,8 @@ class Document(ABC):
     def getCollection(dbname, colname):
         collection = dbname[colname]
         return collection.find()
+
+    @staticmethod
+    def getDocument(dbname, colname, critiria):
+        collection = dbname[colname]
+        return collection.find(critiria)

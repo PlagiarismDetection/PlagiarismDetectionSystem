@@ -54,6 +54,10 @@ class EngPreprocessing():
         return text1.lower()
 
     @staticmethod
+    def sentence_split(text):
+        return sent_tokenize(text)
+
+    @staticmethod
     def tokenization(text):
         return word_tokenize(text)
 
