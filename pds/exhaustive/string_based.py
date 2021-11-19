@@ -7,6 +7,7 @@ class StringBasedTechnique(ABC):
     def __rabin_karp_with_hashing(pattern, text, q):
         M = len(pattern)
         N = len(text)
+        if M > N: return False
         i = 0
         j = 0
         p = 0
@@ -53,6 +54,6 @@ class StringBasedTechnique(ABC):
                     if cls.__rabin_karp_with_hashing(gram, sent, hash_prime):
                         similar.append(sent)
                 if len(similar) > 0:
-                    result.append(input_sent, similar)
+                    result.append((input_sent, similar))
                     break
         return result

@@ -5,6 +5,7 @@ import operator
 class Candidate(ABC):
     def __init__(self, SM, document):
         super().__init__()
+        self.id = document['_id']
         self.title = document['Title']
         self.author = document['Author']
         self.created_time = document['Created-time']
@@ -21,6 +22,9 @@ class Candidate(ABC):
 
     def getSM(self):
         return self.sm
+
+    def getId(self):
+        return self.id
 
 
 class CandidateList(ABC):
