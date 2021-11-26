@@ -3,6 +3,26 @@ import requests
 from bs4 import BeautifulSoup
 from tika import parser
 
+class OnlSource():
+    def __init__(self, metadata, content):
+        self.url = metadata['url']
+        self.title = metadata['title']
+        self.snippet = metadata['snippet']
+        self.content = content
+
+    def getUrl(self):
+        return self.url
+
+    def getTitle(self):
+        return self.title
+
+    def getSnippet(self):
+        return self.getSnippet
+
+    def getContent(self):
+        return self.content
+
+
 class ReadOnlSource():
     def __init__(self):
         pass
@@ -28,18 +48,19 @@ class ReadOnlSource():
     @classmethod
     def read_pdf_from_url(cls, url):
         path = cls.download_pdf_from_url(url)
-
         if path:
-            raw = parser.from_file('Philani_Magubane_2019.pdf')
+            raw = parser.from_file(path)
+            os.remove(path)
             return raw["content"]
+        return False
         # print('Cant read ', url)
 
     @staticmethod
     def read_text_from_url(url):
-        url = 'https://www.geeksforgeeks.org/python-urllib-module/'
-        response = requests.get(url)
+        response = requests.get(url, verify=False)
 
         if response.status_code == 200:
+
             soup = BeautifulSoup(response.text, features="html.parser")
 
             # kill all script and style elements
@@ -70,4 +91,23 @@ class ReadOnlSource():
     @staticmethod
     def is_pdf_url(url):
         return url.endswith('.pdf')
-        
+
+    @classmethod
+    def getOnlList(cls, searchlist):
+        onlList = []
+        skipWebLst = ['tailieumienphi.vn']
+        skipTailLst = ['model', 'aspx']
+        for searchres in searchlist:
+            content = ''
+            if searchres['url'].split('.')[-1] in skipTailLst or searchres['url'].split('/')[2] in skipWebLst:
+                continue
+            if cls.is_pdf_url(searchres['url']):
+                content = cls.read_pdf_from_url(searchres['url'])
+            else:
+                content = cls.read_text_from_url(searchres['url'])
+
+            if content:
+                onlSrc = OnlSource(searchres, content)
+                onlList.append(onlSrc)
+        print('Read Online source Finish')
+        return onlList

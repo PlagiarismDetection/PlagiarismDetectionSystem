@@ -3,7 +3,8 @@ import pandas as pd
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-from pds.pre_processing import VnmPreprocessing, EngPreprocessing
+from pds.pre_processing.vnm_preprocessing import VnmPreprocessing
+from pds.pre_processing.eng_preprocessing import EngPreprocessing
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from nltk import ngrams
 
