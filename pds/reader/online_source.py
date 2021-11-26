@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from tika import parser
 
+
 class OnlSource():
     def __init__(self, metadata, content):
         self.url = metadata['url']
@@ -17,7 +18,7 @@ class OnlSource():
         return self.title
 
     def getSnippet(self):
-        return self.getSnippet
+        return self.snippet
 
     def getContent(self):
         return self.content
