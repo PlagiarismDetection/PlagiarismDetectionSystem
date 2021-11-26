@@ -102,10 +102,13 @@ class ReadOnlSource():
             content = ''
             if searchres['url'].split('.')[-1] in skipTailLst or searchres['url'].split('/')[2] in skipWebLst:
                 continue
-            if cls.is_pdf_url(searchres['url']):
-                content = cls.read_pdf_from_url(searchres['url'])
-            else:
-                content = cls.read_text_from_url(searchres['url'])
+            try:
+                if cls.is_pdf_url(searchres['url']):
+                    content = cls.read_pdf_from_url(searchres['url'])
+                else:
+                    content = cls.read_text_from_url(searchres['url'])
+            except:
+                print('Cant read url: ', searchres['url'])
 
             if content:
                 onlSrc = OnlSource(searchres, content)
