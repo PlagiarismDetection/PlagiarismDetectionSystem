@@ -96,8 +96,8 @@ class ReadOnlSource():
     @classmethod
     def getOnlList(cls, searchlist):
         onlList = []
-        skipWebLst = ['tailieumienphi.vn']
-        skipTailLst = ['model', 'aspx']
+        skipWebLst = ['tailieumienphi.vn','baovanhoa.vn','nslide.com']
+        skipTailLst = ['model', 'aspx','xls']
         for searchres in searchlist:
             content = ''
             if searchres['url'].split('.')[-1] in skipTailLst or searchres['url'].split('/')[2] in skipWebLst:

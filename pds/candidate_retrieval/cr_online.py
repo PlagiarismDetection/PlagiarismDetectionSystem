@@ -236,3 +236,10 @@ class CROnline():
 
         # print(len(check_snippet_based))
         return check_snippet_based
+    @classmethod
+    def combine_all_step(cls, data, language='vi'):
+        chunk_list = cls.chunking(data,language)
+        query_list = cls.query_formulate(chunk_list, 20,language)
+        search_res = cls.search_control(query_list)
+        filter = cls.download_filtering_hybrid(search_res,data, language)
+        return filter
