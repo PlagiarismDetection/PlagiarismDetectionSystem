@@ -25,9 +25,15 @@ def vie_offline_string_based_with_rabinkarp(database, collection, input_path, ca
         SM_list = list(map(lambda source_pp: SimilarityMetric.n_gram_matching(
             input_vie_pp, source_pp, 3, metric), source_vie_pp))
 
+<<<<<<< HEAD
         collection = Document.getCollection(database, collection)
         candidate_list = CandidateList(
             SM_list, collection).get_k_top_similarity(candidate_num)
+=======
+        col = Document.getCollection(database, collection)
+        candidate_list = CandidateList(
+            SM_list, col).get_k_top_similarity(candidate_num)
+>>>>>>> 9fb4ce608c92002bb74492b37036502364db2539
 
         print('Candidate Retrieval done!')
         # Step 3: Exhaustive Comparison
