@@ -1,12 +1,13 @@
 from pds.database.document import Document
 from pds.database.connection import Connection
-from pds.candidate_retrieval.pre_processing import WordPreprocessing, NonPreProcessing
+from pds.candidate_retrieval.pre_processing import WordPreprocessing
 from pds.reader.input import readInputs
 from pds.candidate_retrieval.candidate import CandidateList
 from pds.candidate_retrieval.similarity_metric import SimilarityMetric
 
 database = Connection(
-    'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000', 'Documents').getDatabase()
+    'mongodb+srv://phuockaus:phuockaus0412@pds.qfuxg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', 'Documents').getDatabase()
+
 
 input_vie = readInputs('inputs')
 input_vie_pp = WordPreprocessing.VieFilesProcessing(input_vie)

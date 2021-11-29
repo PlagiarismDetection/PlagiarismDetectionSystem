@@ -9,6 +9,7 @@ class Candidate(ABC):
         self.title = document['Title']
         self.author = document['Author']
         self.created_time = document['Created-time']
+        self.content = document['Content']
         self.sm = SM
 
     def getTitle(self):
@@ -22,6 +23,9 @@ class Candidate(ABC):
 
     def getSM(self):
         return self.sm
+
+    def getContent(self):
+        return self.content
 
     def getId(self):
         return self.id

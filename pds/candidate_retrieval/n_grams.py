@@ -5,7 +5,7 @@ from nltk import ngrams
 class NGrams(ABC):
     @staticmethod
     def makeNgrams(token_list, n):
-        return ngrams(token_list, n, pad_left=False, pad_right=True, right_pad_symbol=' ')
+        return ngrams(token_list, n)
 
     @classmethod
     def makeNgramString(cls, token_list, n):

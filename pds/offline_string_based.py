@@ -7,6 +7,12 @@ from pds.candidate_retrieval.similarity_metric import SimilarityMetric
 from pds.exhaustive.sentence import EngSentence, VieSentence
 from pds.exhaustive.string_based import StringBasedTechnique
 from pds.exhaustive.result import Evidence, Result
+import re
+
+
+def remove_dumb_sent(text):
+    cleanStr = re.sub('[.-:]+', '', text)
+    return cleanStr
 
 
 def vie_offline_string_based_with_rabinkarp(database, collection, input_path, candidate_num, metric, ngrams_num, hash_prime):
@@ -25,34 +31,34 @@ def vie_offline_string_based_with_rabinkarp(database, collection, input_path, ca
         SM_list = list(map(lambda source_pp: SimilarityMetric.n_gram_matching(
             input_vie_pp, source_pp, 3, metric), source_vie_pp))
 
-<<<<<<< HEAD
-        collection = Document.getCollection(database, collection)
-        candidate_list = CandidateList(
-            SM_list, collection).get_k_top_similarity(candidate_num)
-=======
         col = Document.getCollection(database, collection)
         candidate_list = CandidateList(
             SM_list, col).get_k_top_similarity(candidate_num)
->>>>>>> 9fb4ce608c92002bb74492b37036502364db2539
 
         print('Candidate Retrieval done!')
         # Step 3: Exhaustive Comparison
         result = Result(input_vie.getTitle())
-        candidate_list_full = list(map(lambda candidate: Document.getDocument(
-            database, collection, {'Title': candidate.getTitle(), 'Content': 1}), candidate_list))
 
         input_sent_list = VnmPreprocessing.sentence_split(
             input_vie.getContent())
+        input_sent_list = list(
+            map(lambda sent: remove_dumb_sent(sent), input_sent_list))
+        input_sent_list = list(
+            filter(lambda sent: len(sent) != 0, input_sent_list))
         input_sent_list_with_word = list(
             map(lambda sent: VieSentence(sent), input_sent_list))
 
-        for candidate in candidate_list_full:
-            candidate_sent_list = VnmPreprocessing.sentence_split(
-                candidate['Content'])
-            candidate_sent_list_with_word = list(
-                map(lambda sent: VieSentence(sent), candidate_sent_list))
-            evidence = Evidence(candidate['Title'], StringBasedTechnique.n_gram_matching(
-                input_sent_list_with_word, candidate_sent_list_with_word, ngrams_num, hash_prime))
-            result.addEvidence(evidence)
+    for candidate in candidate_list:
+        candidate_sent_list = VnmPreprocessing.sentence_split(
+            candidate.getContent())
+        candidate_sent_list = list(
+            map(lambda sent: remove_dumb_sent(sent), input_sent_list))
+        candidate_sent_list = list(
+            filter(lambda sent: len(sent) != 0, input_sent_list))
+        candidate_sent_list_with_word = list(
+            map(lambda sent: VieSentence(sent), candidate_sent_list))
+        evidence = Evidence(candidate.getTitle(), StringBasedTechnique.n_gram_matching(
+            input_sent_list_with_word, candidate_sent_list_with_word, ngrams_num, hash_prime))
+        result.addEvidence(evidence)
 
-        result.print()
+    result.print()
